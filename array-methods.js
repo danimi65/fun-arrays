@@ -1,4 +1,6 @@
+//jshint esversion: 6
 var dataset = require('./dataset.json');
+var bankBalances = dataset.bankBalances;
 
 /*
   create an array with accounts from bankBalances that are
@@ -6,6 +8,14 @@ var dataset = require('./dataset.json');
   assign the resulting array to `hundredThousandairs`
 */
 var hundredThousandairs = null;
+
+hundredThousandairs = bankBalances.filter((element, index, array) => {
+  if( element.amount > 100000.00){
+    return true;
+  }
+  return false;
+});
+
 
 /*
   set a new key for each object in bankBalances named `rounded`
@@ -19,6 +29,14 @@ var hundredThousandairs = null;
   assign the resulting array to `roundedDollar`
 */
 var roundedDollar = null;
+roundedDollar = [];
+let roundedAmount = bankBalances.map((element, index, array) =>{
+  let newObject = {};
+  newObject.rounded = Math.round(element.amount);
+  newObject.state = element.state;
+  roundedDollar.push(newObject);
+
+});
 
 /*
   set a the `amount` value for each object in bankBalances
@@ -31,9 +49,21 @@ var roundedDollar = null;
   assign the resulting array to `roundedDime`
 */
 var roundedDime = null;
+roundedDime = [];
+let roundedDimeAmount = bankBalances.map((element, index, array) => {
+  let newObject = {};
+  newObject.amount = Math.round(element.amount*10)/10;
+  newObject.state = element.state;
+  roundedDime.push(newObject);
+});
+
+
+
+
 
 // set sumOfBankBalances to the sum of all amounts in bankBalances
 var sumOfBankBalances = null;
+
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
