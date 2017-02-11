@@ -71,8 +71,7 @@ return Math.round(newSum*100)/100;
 
 }
 sumOfBankBalances = bankBalances.reduce(summarize, 0);
-console.log(sumOfBankBalances);
-
+ 
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
@@ -87,6 +86,70 @@ console.log(sumOfBankBalances);
   the result should be rounded to the nearest cent
  */
 var sumOfInterests = null;
+var newState = {};
+
+function filterState(element, index, array){
+  switch(element.state){
+    case "WI":
+      return true;
+      break;
+    case "IL":
+      return true;
+      break;
+    case "WY":
+      return true;
+      break;
+    case "OH":
+      return true;
+      break;
+    case "GA":
+      return true;
+      break;
+    case "DE":
+      return true;
+      break;
+    default:
+      return false;
+
+
+  }
+ //  if(element.state === "WI" || "IL" || "WY" || "OH" || "GA" || "DE"){
+ //   return true;
+ // }
+  
+}
+
+function interest(prev, curr, i, arr){
+  let stateInterest = curr.amount * (18.9/100);
+  let total = prev  + stateInterest;
+  return Math.round(total * 100)/100;
+
+
+}
+ 
+ sumOfInterests = bankBalances.filter(filterState).reduce(interest, 0);
+ console.log(sumOfInterests); 
+
+
+
+
+
+/*
+  aggregate the sum of bankBalance amounts
+  grouped by state
+  set stateSums to be a hash table
+    where the key is the two letter state abbreviation
+    and the value is the sum of all amounts from that state
+      the value must be rounded to the nearest cent
+ */
+var stateSums = dataset.bankBalances.reduce((accounts, currentAccount) => {
+  if(!accounts.hasOwnProperty(currentAccount.state)){
+    accounts[currentAccount.state]= 0;
+  }
+  accounts[currentAccount.state] += parseFloat(currentAccount.amount);
+  accounts[currentAccount.state] = Math.round(accounts[currentAccount.state]*100)/100;
+  return accounts;
+}, {});
 
 /*
   set sumOfHighInterests to the sum of the 18.9% interest
@@ -102,17 +165,40 @@ var sumOfInterests = null;
     Delaware
   the result should be rounded to the nearest cent
  */
-var sumOfHighInterests = null;
+var sumOfHighInterests = Object.keys(stateSums)
+.filter((state) =>  ['WI', 'IL', 'WY', 'OH', 'GA', 'DE'].indexOf(state) === -1)
 
-/*
-  aggregate the sum of bankBalance amounts
-  grouped by state
-  set stateSums to be a hash table
-    where the key is the two letter state abbreviation
-    and the value is the sum of all amounts from that state
-      the value must be rounded to the nearest cent
- */
-var stateSums = null;
+//convert amount to be the interest
+.map((state) => {
+  return {
+    state,
+    interest: Math.round(stateSums[state] * 18.9)/100
+  };
+})
+
+//use only interest amounts that are greater than 50,000
+.filter((account) => {
+  return account.interest > 50000;
+})
+
+//add all the states interest together
+.reduce((prevInterest, currentAccount) => {
+  return prevInterest + currentAccount.interest;
+}, 0);
+
+sumofHighInterest = Math.round(sumOfHighInterests * 100) /100;
+
+console.log(sumOfHighInterests);
+
+
+// function filterHighState(element, index, array){
+
+//   if(element.state !== "WI" || "IL" || "WY" || "OH" || "GA" || "DE" && ){
+
+//   }
+// }
+
+
 
 /*
   set lowerSumStates to an array containing
