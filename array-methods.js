@@ -64,6 +64,15 @@ let roundedDimeAmount = bankBalances.map((element, index, array) => {
 // set sumOfBankBalances to the sum of all amounts in bankBalances
 var sumOfBankBalances = null;
 
+function summarize(prev, curr, i, arr){
+ let newSum = prev + parseFloat(curr.amount);
+
+return Math.round(newSum*100)/100;
+
+}
+sumOfBankBalances = bankBalances.reduce(summarize, 0);
+console.log(sumOfBankBalances);
+
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
